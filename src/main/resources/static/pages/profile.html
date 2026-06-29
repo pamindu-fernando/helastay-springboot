@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — Hela Stay</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/index.html" class="nav-brand">
+    <img src="/logo.png" alt="Hela Stay Logo" style="height: 90px; width: auto; object-fit: contain; display: block; margin-right: 8px;">
+  </a>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<div class="container-sm" style="padding-top:calc(var(--navbar-h) + var(--space-8));padding-bottom:var(--space-16);">
+  <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:var(--space-8);">My Profile</h1>
+
+  <!-- Avatar Section -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-8);margin-bottom:var(--space-6);display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap;">
+    <div style="position:relative;">
+      <div id="avatar-display" style="width:90px;height:90px;border-radius:50%;background:var(--grad-primary);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:2rem;color:white;overflow:hidden;border:3px solid var(--primary);"></div>
+      <label for="avatar-upload" style="position:absolute;bottom:0;right:0;width:28px;height:28px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;color:white;border:2px solid var(--bg);">📷</label>
+      <input type="file" id="avatar-upload" accept="image/*" style="display:none;">
+    </div>
+    <div>
+      <div id="profile-name" style="font-size:1.25rem;font-weight:700;"></div>
+      <div id="profile-email" style="color:var(--text-3);font-size:0.875rem;margin-top:2px;"></div>
+      <span id="profile-role" class="badge badge-primary" style="margin-top:var(--space-2);"></span>
+    </div>
+  </div>
+
+  <!-- Edit Form -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-8);">
+    <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:var(--space-6);">Personal Information</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);">
+      <div class="form-group">
+        <label class="form-label" for="p-first">First Name</label>
+        <input class="form-control" type="text" id="p-first">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="p-last">Last Name</label>
+        <input class="form-control" type="text" id="p-last">
+      </div>
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label" for="p-email">Email</label>
+        <input class="form-control" type="email" id="p-email" disabled style="opacity:0.6;">
+        <span style="font-size:0.75rem;color:var(--text-4);">Email cannot be changed.</span>
+      </div>
+      <div class="form-group" style="grid-column:1/-1;">
+        <label class="form-label" for="p-phone">Phone Number</label>
+        <input class="form-control" type="tel" id="p-phone" placeholder="+1 555 000 0000">
+      </div>
+    </div>
+
+    <div id="profile-success" style="display:none;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);color:var(--success);font-size:0.875rem;margin-top:var(--space-4);">Profile updated successfully! ✓</div>
+    <div id="profile-error" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);color:var(--danger);font-size:0.875rem;margin-top:var(--space-4);"></div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:var(--space-6);">
+      <button class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Account info -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-6);margin-top:var(--space-6);">
+    <h2 style="font-size:1rem;font-weight:700;margin-bottom:var(--space-4);">Account</h2>
+    <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+      <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+        <span style="color:var(--text-3);">Member since</span>
+        <span id="member-since" style="font-weight:600;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+        <span style="color:var(--text-3);">Account type</span>
+        <span id="account-type" style="font-weight:600;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="../js/profile.js"></script>
+</body>
+</html>
+

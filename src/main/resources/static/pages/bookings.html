@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings — Hela Stay</title>
+  <meta name="description" content="View and manage all your Hela Stay bookings.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/index.html" class="nav-brand">
+    <img src="/logo.png" alt="Hela Stay Logo" style="height: 90px; width: auto; object-fit: contain; display: block; margin-right: 8px;">
+  </a>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<div class="container" style="padding-top:calc(var(--navbar-h) + var(--space-8));padding-bottom:var(--space-16);max-width:900px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-8);">
+    <h1 style="font-size:1.75rem;font-weight:800;">My Bookings</h1>
+    <a href="/pages/search.html" class="btn btn-primary">Find a Stay</a>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="tabs" style="margin-bottom:var(--space-6);">
+    <button class="tab-btn active" data-filter="ALL">All</button>
+    <button class="tab-btn" data-filter="PENDING">Pending</button>
+    <button class="tab-btn" data-filter="CONFIRMED">Confirmed</button>
+    <button class="tab-btn" data-filter="COMPLETED">Completed</button>
+    <button class="tab-btn" data-filter="CANCELLED">Cancelled</button>
+  </div>
+
+  <div id="bookings-list" style="display:flex;flex-direction:column;gap:var(--space-4);">
+    <!-- Skeleton -->
+    <div class="skeleton" style="height:120px;border-radius:var(--radius-xl);"></div>
+    <div class="skeleton" style="height:120px;border-radius:var(--radius-xl);"></div>
+    <div class="skeleton" style="height:120px;border-radius:var(--radius-xl);"></div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" id="review-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Leave a Review</div>
+      <button class="modal-close" id="close-review">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Your Rating</label>
+        <div class="stars" id="modal-stars" style="font-size:2rem;gap:6px;">
+          <span class="star" data-val="1">★</span>
+          <span class="star" data-val="2">★</span>
+          <span class="star" data-val="3">★</span>
+          <span class="star" data-val="4">★</span>
+          <span class="star" data-val="5">★</span>
+        </div>
+        <input type="hidden" id="modal-rating">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="modal-comment">Your Review</label>
+        <textarea class="form-control" id="modal-comment" rows="4" placeholder="Share your experience…"></textarea>
+      </div>
+      <div id="modal-review-error" style="display:none;color:var(--danger);font-size:0.875rem;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancel-review">Cancel</button>
+      <button class="btn btn-primary" id="submit-review">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="../js/bookings.js"></script>
+</body>
+</html>
+

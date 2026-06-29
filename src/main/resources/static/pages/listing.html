@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing Detail — Hela Stay</title>
+  <meta name="description" content="View property details, amenities, reviews, and book your stay on Hela Stay.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .listing-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--space-10);
+      align-items: start;
+    }
+    @media(max-width:900px) {
+      .listing-detail-layout { grid-template-columns: 1fr; }
+      .booking-widget { position: static; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/index.html" class="nav-brand">
+    <img src="/logo.png" alt="Hela Stay Logo" style="height: 90px; width: auto; object-fit: contain; display: block; margin-right: 8px;">
+  </a>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<div class="container" style="padding-top:calc(var(--navbar-h) + var(--space-8));padding-bottom:var(--space-16);">
+
+  <!-- Skeleton / Loading -->
+  <div id="listing-loading">
+    <div class="skeleton" style="height:480px;border-radius:var(--radius-xl);margin-bottom:var(--space-6);"></div>
+    <div class="skeleton" style="height:36px;width:60%;margin-bottom:var(--space-4);"></div>
+    <div class="skeleton" style="height:20px;width:40%;"></div>
+  </div>
+
+  <!-- Actual content (hidden until loaded) -->
+  <div id="listing-content" style="display:none;">
+
+    <!-- Gallery -->
+    <div class="gallery-grid" id="gallery-grid" style="margin-bottom:var(--space-8);"></div>
+
+    <!-- Back link -->
+    <a href="javascript:history.back()" style="display:inline-flex;align-items:center;gap:6px;color:var(--text-3);font-size:0.875rem;margin-bottom:var(--space-6);">← Back to search</a>
+
+    <div class="listing-detail-layout">
+
+      <!-- Left: Details -->
+      <div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4);">
+          <div>
+            <h1 id="listing-title" style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;margin-bottom:var(--space-3);"></h1>
+            <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
+              <div id="listing-location" style="color:var(--text-3);font-size:0.9rem;"></div>
+              <div id="listing-rating" style="display:flex;align-items:center;gap:6px;font-size:0.9rem;font-weight:600;"></div>
+            </div>
+          </div>
+          <span id="listing-type-badge" class="badge badge-primary" style="flex-shrink:0;font-size:0.8rem;padding:5px 12px;"></span>
+        </div>
+
+        <!-- Quick stats -->
+        <div style="display:flex;gap:var(--space-6);padding:var(--space-5) 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:var(--space-6);">
+          <div style="text-align:center;">
+            <div style="font-size:1.2rem;font-weight:800;" id="stat-guests"></div>
+            <div style="font-size:0.75rem;color:var(--text-3);">guests</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.2rem;font-weight:800;" id="stat-bedrooms"></div>
+            <div style="font-size:0.75rem;color:var(--text-3);">bedrooms</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.2rem;font-weight:800;" id="stat-bathrooms"></div>
+            <div style="font-size:0.75rem;color:var(--text-3);">bathrooms</div>
+          </div>
+        </div>
+
+        <!-- Host info -->
+        <div style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-5) 0;border-bottom:1px solid var(--border);margin-bottom:var(--space-6);">
+          <div id="host-avatar-container"></div>
+          <div>
+            <div id="host-name" style="font-weight:700;"></div>
+            <div style="font-size:0.8rem;color:var(--text-3);">Your host</div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div style="margin-bottom:var(--space-8);">
+          <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:var(--space-4);">About this place</h2>
+          <p id="listing-description" style="color:var(--text-2);line-height:1.8;font-size:0.95rem;"></p>
+        </div>
+
+        <!-- Amenities -->
+        <div style="margin-bottom:var(--space-8);">
+          <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:var(--space-5);">What this place offers</h2>
+          <div class="amenities-grid" id="amenities-grid"></div>
+        </div>
+
+        <!-- Location / Map -->
+        <div style="margin-bottom:var(--space-8);">
+          <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:var(--space-5);">Where you'll be</h2>
+          <div id="listing-map"></div>
+        </div>
+
+        <!-- Reviews -->
+        <div id="reviews-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-6);">
+            <h2 style="font-size:1.2rem;font-weight:700;" id="reviews-heading">Reviews</h2>
+            <button id="add-review-btn" class="btn btn-outline btn-sm" style="display:none;">+ Write a Review</button>
+          </div>
+          <div id="reviews-grid" style="display:flex;flex-direction:column;gap:var(--space-4);"></div>
+        </div>
+      </div>
+
+      <!-- Right: Booking Widget -->
+      <div>
+        <div class="booking-widget" id="booking-widget">
+          <div class="booking-price">
+            <span class="amount" id="booking-price"></span>
+            <span class="per-night"> / night</span>
+          </div>
+
+          <div class="date-inputs">
+            <div class="date-input-field">
+              <label>CHECK IN</label>
+              <input type="date" id="checkin-date">
+            </div>
+            <div class="date-input-field">
+              <label>CHECK OUT</label>
+              <input type="date" id="checkout-date">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:var(--space-4);">
+            <div style="border:1.5px solid var(--border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);">
+              <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);display:block;margin-bottom:2px;">GUESTS</label>
+              <input type="number" id="num-guests" min="1" value="1" style="background:none;border:none;outline:none;color:var(--text);font-size:0.875rem;font-weight:500;width:100%;">
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-full btn-lg" id="book-btn">Reserve</button>
+
+          <div class="booking-price-breakdown" id="price-breakdown" style="display:none;">
+            <div class="price-row">
+              <span id="breakdown-nights-label"></span>
+              <span id="breakdown-nights-total"></span>
+            </div>
+            <div class="price-row">
+              <span>Service fee</span>
+              <span id="breakdown-fee"></span>
+            </div>
+            <div class="price-row total">
+              <span>Total</span>
+              <span id="breakdown-total"></span>
+            </div>
+          </div>
+
+          <p style="text-align:center;font-size:0.75rem;color:var(--text-3);margin-top:var(--space-4);">You won't be charged yet</p>
+        </div>
+
+        <!-- Not logged in note -->
+        <div id="login-to-book" style="display:none;background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-6);text-align:center;">
+          <div style="font-size:2rem;margin-bottom:var(--space-3);">🔒</div>
+          <p style="font-size:0.9rem;color:var(--text-2);margin-bottom:var(--space-4);">Sign in to book this stay</p>
+          <a href="login.html" class="btn btn-primary btn-full">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" id="review-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Write a Review</div>
+      <button class="modal-close" id="close-review-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Your Rating</label>
+        <div class="stars" id="rating-stars" style="font-size:2rem;gap:6px;">
+          <span class="star" data-val="1">★</span>
+          <span class="star" data-val="2">★</span>
+          <span class="star" data-val="3">★</span>
+          <span class="star" data-val="4">★</span>
+          <span class="star" data-val="5">★</span>
+        </div>
+        <input type="hidden" id="review-rating" value="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="review-comment">Your Review</label>
+        <textarea class="form-control" id="review-comment" rows="4" placeholder="Share your experience about this stay…"></textarea>
+        <span class="form-error" id="review-error" style="display:none;"></span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancel-review-btn">Cancel</button>
+      <button class="btn btn-primary" id="submit-review-btn">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Carousel -->
+<div class="lightbox-overlay" id="lightbox-overlay">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <button class="lightbox-prev" id="lightbox-prev">‹</button>
+  <button class="lightbox-next" id="lightbox-next">›</button>
+  <div class="lightbox-content">
+    <img src="" id="lightbox-img" alt="Gallery Image">
+  </div>
+</div>
+
+<script type="module" src="../js/listing.js"></script>
+</body>
+</html>
+

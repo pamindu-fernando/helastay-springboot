@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - හෙළStay</title>
+  <meta name="description"
+    content="Join Hela Stay as a guest or host. Discover unique stays or earn income sharing your space.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <div class="auth-page">
+
+    <!-- Visual Side -->
+    <div class="auth-visual">
+      <div class="hero-bg-orb hero-bg-orb-1"></div>
+      <div class="hero-bg-orb hero-bg-orb-3"></div>
+      <div style="position:relative;z-index:1;text-align:center;max-width:400px;">
+        <img src="/logo.png" alt="Hela Stay Logo"
+          style="height: 140px; width: auto; object-fit: contain; display: block; margin: 0 auto var(--space-6) auto;">
+        <h2 style="font-size:2rem;font-weight:800;margin-bottom:var(--space-4);">Join Hela Stay</h2>
+        <p style="color:var(--text-2);line-height:1.8;">Whether you're exploring the world or opening your door to
+          guests — start your journey here.</p>
+
+        <div style="margin-top:var(--space-8);display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+          <div class="glass-card" style="padding:var(--space-5);text-align:center;">
+            <div style="font-weight:700;font-size:0.9rem;">As a Guest</div>
+            <div style="color:var(--text-3);font-size:0.75rem;margin-top:4px;">Discover & book amazing stays worldwide
+            </div>
+          </div>
+          <div class="glass-card" style="padding:var(--space-5);text-align:center;">
+            <div style="font-weight:700;font-size:0.9rem;">As a Host</div>
+            <div style="color:var(--text-3);font-size:0.75rem;margin-top:4px;">List your property & earn income</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Side -->
+    <div class="auth-form-side" style="overflow-y:auto;">
+      <div class="auth-form-box">
+        <div class="auth-logo">
+          <a href="/index.html"><img src="/logo.png" alt="Hela Stay Logo"
+              style="height: 48px; width: auto; object-fit: contain;"></a>
+        </div>
+
+        <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:var(--space-2);">Create account</h1>
+        <p style="color:var(--text-3);font-size:0.9rem;margin-bottom:var(--space-8);">Already have an account? <a
+            href="login.html" style="color:var(--primary);font-weight:600;">Sign in</a></p>
+
+        <div id="error-alert"
+          style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:0.875rem;color:var(--danger);margin-bottom:var(--space-5);">
+        </div>
+
+        <form id="register-form" novalidate>
+          <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+
+            <!-- Role Toggle -->
+            <div>
+              <label class="form-label" style="margin-bottom:var(--space-3);">I want to join as</label>
+              <div class="tabs" style="width:100%;">
+                <button type="button" class="tab-btn active" id="role-guest" style="flex:1;"
+                  data-role="GUEST">Guest</button>
+                <button type="button" class="tab-btn" id="role-host" style="flex:1;" data-role="HOST">Host</button>
+              </div>
+              <input type="hidden" id="role" value="GUEST">
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+              <div class="form-group">
+                <label class="form-label" for="firstName">First name</label>
+                <input class="form-control" type="text" id="firstName" placeholder="John" required>
+                <span class="form-error" id="firstName-error" style="display:none;"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lastName">Last name</label>
+                <input class="form-control" type="text" id="lastName" placeholder="Doe" required>
+                <span class="form-error" id="lastName-error" style="display:none;"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email address</label>
+              <input class="form-control" type="email" id="email" placeholder="you@example.com" autocomplete="email"
+                required>
+              <span class="form-error" id="email-error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone number (optional)</label>
+              <input class="form-control" type="tel" id="phone" placeholder="+1 555 000 0000">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="password">Password</label>
+              <div style="position:relative;">
+                <input class="form-control" type="password" id="password" placeholder="At least 6 characters"
+                  autocomplete="new-password" required style="padding-right:48px;">
+                <button type="button" id="toggle-pw"
+                  style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg></button>
+              </div>
+              <span class="form-error" id="pw-error" style="display:none;"></span>
+              <!-- Strength indicator -->
+              <div id="pw-strength" style="display:none;margin-top:6px;">
+                <div style="display:flex;gap:4px;margin-bottom:4px;">
+                  <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--bg-4);"></div>
+                  <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--bg-4);"></div>
+                  <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--bg-4);"></div>
+                  <div class="pw-bar" style="flex:1;height:3px;border-radius:2px;background:var(--bg-4);"></div>
+                </div>
+                <span id="pw-strength-label" style="font-size:0.75rem;color:var(--text-3);"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirm-password">Confirm password</label>
+              <input class="form-control" type="password" id="confirm-password" placeholder="Repeat password" required>
+              <span class="form-error" id="confirm-pw-error" style="display:none;"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="submit-btn">Create Account</button>
+          </div>
+        </form>
+
+        <div class="divider" style="margin:var(--space-6) 0;">or</div>
+        <a href="#" onclick="sessionStorage.setItem('guest_mode', 'true'); window.location.href='/index.html'; return false;" style="display:block; width:100%; text-align:center; padding:12px; border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); text-decoration:none; font-weight:600; background:var(--bg-3); transition:background 0.2s;">
+          Browse as Guest
+        </a>
+
+        <p style="text-align:center;color:var(--text-4);font-size:0.75rem;margin-top:var(--space-6);">
+          By creating an account, you agree to our Terms of Service and Privacy Policy.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/register.js"></script>
+</body>
+
+</html>

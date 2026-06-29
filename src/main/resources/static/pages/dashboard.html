@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Host Dashboard — Hela Stay</title>
+  <meta name="description" content="Manage your Hela Stay listings and incoming bookings from the host dashboard.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar">
+    <a href="/index.html" class="nav-brand">
+      <img src="/logo.png" alt="Hela Stay Logo"
+        style="height: 90px; width: auto; object-fit: contain; display: block; margin-right: 8px;">
+    </a>
+    <div class="nav-actions" id="nav-actions"></div>
+  </nav>
+
+  <div class="container" style="padding-top:calc(var(--navbar-h) + var(--space-8));padding-bottom:var(--space-16);">
+
+    <!-- Header -->
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-10);flex-wrap:wrap;gap:var(--space-4);">
+      <div>
+        <h1 style="font-size:2rem;font-weight:800;">Host Dashboard</h1>
+        <p style="color:var(--text-3);margin-top:var(--space-2);" id="host-greeting">Manage your listings and bookings
+        </p>
+      </div>
+      <button class="btn btn-primary" id="new-listing-btn">+ New Listing</button>
+    </div>
+
+    <!-- Stats row -->
+    <div
+      style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--space-5);margin-bottom:var(--space-10);"
+      id="stats-row">
+      <div class="glass-card" style="padding:var(--space-6);">
+        <div
+          style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:var(--space-2);">
+          Active Listings</div>
+        <div style="font-size:2rem;font-weight:800;color:var(--primary);" id="stat-listings">—</div>
+      </div>
+      <div class="glass-card" style="padding:var(--space-6);">
+        <div
+          style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:var(--space-2);">
+          Total Bookings</div>
+        <div style="font-size:2rem;font-weight:800;color:var(--info);" id="stat-bookings">—</div>
+      </div>
+      <div class="glass-card" style="padding:var(--space-6);">
+        <div
+          style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:var(--space-2);">
+          Pending</div>
+        <div style="font-size:2rem;font-weight:800;color:var(--warning);" id="stat-pending">—</div>
+      </div>
+      <div class="glass-card" style="padding:var(--space-6);">
+        <div
+          style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:var(--space-2);">
+          Revenue</div>
+        <div style="font-size:2rem;font-weight:800;color:var(--success);" id="stat-revenue">—</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" style="margin-bottom:var(--space-8);">
+      <button class="tab-btn active" id="tab-listings" onclick="switchTab('listings')">🏠 My Listings</button>
+      <button class="tab-btn" id="tab-bookings" onclick="switchTab('bookings')">📅 Incoming Bookings</button>
+    </div>
+
+    <!-- Listings Panel -->
+    <div id="panel-listings">
+      <div id="listings-table-wrap"
+        style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+        <div style="padding:var(--space-5);text-align:center;color:var(--text-3);">Loading listings…</div>
+      </div>
+      <div class="pagination" id="listings-pagination"></div>
+    </div>
+
+    <!-- Bookings Panel -->
+    <div id="panel-bookings" style="display:none;">
+      <div id="bookings-table-wrap"
+        style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;">
+        <div style="padding:var(--space-5);text-align:center;color:var(--text-3);">Loading bookings…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Create/Edit Listing Modal -->
+  <div class="modal-overlay" id="listing-modal">
+    <div class="modal" style="max-width:700px;">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Create New Listing</div>
+        <button class="modal-close" id="close-listing-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label" for="l-title">Property Title *</label>
+            <input class="form-control" type="text" id="l-title" placeholder="Stunning beachfront villa with pool">
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label" for="l-description">Description *</label>
+            <textarea class="form-control" id="l-description" rows="3"
+              placeholder="Describe your property in detail…"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-type">Property Type *</label>
+            <select class="form-control" id="l-type">
+              <option value="">Select type…</option>
+              <option value="APARTMENT">Apartment</option>
+              <option value="HOUSE">House</option>
+              <option value="VILLA">Villa</option>
+              <option value="CABIN">Cabin</option>
+              <option value="LOFT">Loft</option>
+              <option value="STUDIO">Studio</option>
+              <option value="PENTHOUSE">Penthouse</option>
+              <option value="TREEHOUSE">Treehouse</option>
+              <option value="COTTAGE">Cottage</option>
+              <option value="BOAT">Boat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-price">Price / Night (LKR) *</label>
+            <input class="form-control" type="number" id="l-price" min="1" placeholder="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-guests">Max Guests *</label>
+            <input class="form-control" type="number" id="l-guests" min="1" placeholder="4">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-bedrooms">Bedrooms *</label>
+            <input class="form-control" type="number" id="l-bedrooms" min="0" placeholder="2">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-bathrooms">Bathrooms *</label>
+            <input class="form-control" type="number" id="l-bathrooms" min="0" placeholder="1">
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label" for="l-address">Address *</label>
+            <input class="form-control" type="text" id="l-address" placeholder="14/4A Galiewewa Road">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-city">City *</label>
+            <input class="form-control" type="text" id="l-city" placeholder="Colombo">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-country">Country *</label>
+            <input class="form-control" type="text" id="l-country" placeholder="Sri Lanka" value="Sri Lanka">
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Pin Location *</label>
+            <div id="map-container"
+              style="height: 300px; width: 100%; border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-2); border: 1px solid var(--border);">
+            </div>
+            <p style="color:var(--text-3);font-size:0.875rem;margin-top:0;">Click on the map to set the exact location
+              in Sri Lanka.</p>
+            <div style="display: flex; gap: var(--space-2); margin-top: var(--space-2);">
+              <input type="text" class="form-control" id="l-lat" placeholder="Latitude" readonly style="flex:1;">
+              <input type="text" class="form-control" id="l-lng" placeholder="Longitude" readonly style="flex:1;">
+            </div>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Amenities</label>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:var(--space-2);">
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="WiFi"><span
+                  class="checkbox-label">📶 WiFi</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Private Pool"><span
+                  class="checkbox-label">🏊 Pool</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Kitchen"><span
+                  class="checkbox-label">🍳 Kitchen</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Parking"><span
+                  class="checkbox-label">🚗 Parking</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Air Conditioning"><span
+                  class="checkbox-label">❄️ AC</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Pet Friendly"><span
+                  class="checkbox-label">🐾 Pets</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Fireplace"><span
+                  class="checkbox-label">🔥 Fireplace</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Hot Tub"><span
+                  class="checkbox-label">🛁 Hot Tub</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Beach Access"><span
+                  class="checkbox-label">🌴 Beach</span></label>
+              <label class="checkbox-item"><input type="checkbox" name="l-amenity" value="Smart TV"><span
+                  class="checkbox-label">📺 Smart TV</span></label>
+            </div>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label" for="l-images">Image URLs (one per line)</label>
+            <textarea class="form-control" id="l-images" rows="3"
+              placeholder="https://images.unsplash.com/..."></textarea>
+            <div class="text-xs text-faint" style="margin-top:4px;">Or upload images:</div>
+            <input type="file" id="l-image-upload" accept="image/*" multiple
+              style="margin-top:6px;color:var(--text-2);font-size:0.875rem;">
+          </div>
+        </div>
+        <div id="modal-error"
+          style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:0.875rem;color:var(--danger);">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="cancel-listing-btn">Cancel</button>
+        <button class="btn btn-primary" id="save-listing-btn">Save Listing</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../js/dashboard.js"></script>
+</body>
+
+</html>

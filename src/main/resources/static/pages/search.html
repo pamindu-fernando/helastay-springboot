@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Stays — Hela Stay</title>
+  <meta name="description" content="Search and filter unique stays worldwide. Filter by price, property type, amenities, and more.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .search-page-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: var(--space-8);
+      padding-top: calc(var(--navbar-h) + var(--space-6));
+      min-height: 100vh;
+      align-items: start;
+    }
+    @media(max-width:900px) {
+      .search-page-layout { grid-template-columns: 1fr; }
+      .filter-sidebar { display: none; }
+      .filter-sidebar.mobile-open { display: block; position: fixed; inset: 0; z-index: 500; overflow-y: auto; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/index.html" class="nav-brand">
+    <img src="/logo.png" alt="Hela Stay Logo" style="height: 90px; width: auto; object-fit: contain; display: block; margin-right: 8px;">
+  </a>
+  <div class="nav-search">
+    <div class="nav-search-pill">
+      <input type="text" id="nav-city-input" placeholder="Where are you going?" style="background:none;border:none;outline:none;color:var(--text);font-size:0.875rem;width:100%;">
+      <button class="nav-search-btn" id="nav-search-btn"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+    </div>
+  </div>
+  <div class="nav-actions" id="nav-actions"></div>
+</nav>
+
+<div class="container">
+  <div class="search-page-layout">
+
+    <!-- FILTER SIDEBAR -->
+    <aside class="filter-sidebar" id="filter-sidebar">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-5);">
+        <h2 style="font-size:1.1rem;font-weight:700;">Filters</h2>
+        <button class="btn btn-ghost btn-sm" id="clear-filters-btn">Clear all</button>
+      </div>
+
+      <!-- Price Range -->
+      <div class="filter-section">
+        <div class="filter-title">Price Range</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
+          <span style="font-size:0.875rem;color:var(--text-2);" id="price-min-label">$0</span>
+          <span style="font-size:0.875rem;color:var(--text-2);" id="price-max-label">$1000+</span>
+        </div>
+        <div class="price-range-track">
+          <div class="price-range-fill" id="price-fill"></div>
+          <input type="range" id="price-min" min="0" max="1000" value="0" step="10">
+          <input type="range" id="price-max" min="0" max="1000" value="1000" step="10">
+        </div>
+      </div>
+
+      <!-- Property Type -->
+      <div class="filter-section">
+        <div class="filter-title">Property Type</div>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" name="type" value="APARTMENT"><span class="checkbox-label">Apartment</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="HOUSE"><span class="checkbox-label">House</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="VILLA"><span class="checkbox-label">Villa</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="CABIN"><span class="checkbox-label">Cabin</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="LOFT"><span class="checkbox-label">Loft</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="STUDIO"><span class="checkbox-label">Studio</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="PENTHOUSE"><span class="checkbox-label">Penthouse</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="TREEHOUSE"><span class="checkbox-label">Treehouse</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="type" value="COTTAGE"><span class="checkbox-label">Cottage</span></label>
+        </div>
+      </div>
+
+      <!-- Rooms & Guests -->
+      <div class="filter-section">
+        <div class="filter-title">Bedrooms</div>
+        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+          <button class="page-btn active" data-beds="any">Any</button>
+          <button class="page-btn" data-beds="1">1+</button>
+          <button class="page-btn" data-beds="2">2+</button>
+          <button class="page-btn" data-beds="3">3+</button>
+          <button class="page-btn" data-beds="4">4+</button>
+        </div>
+      </div>
+
+      <!-- Amenities -->
+      <div class="filter-section">
+        <div class="filter-title">Amenities</div>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="WiFi"><span class="checkbox-label">WiFi</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Private Pool"><span class="checkbox-label">Pool</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Kitchen"><span class="checkbox-label">Kitchen</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Parking"><span class="checkbox-label">Parking</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Air Conditioning"><span class="checkbox-label">AC</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Pet Friendly"><span class="checkbox-label">Pet Friendly</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Fireplace"><span class="checkbox-label">Fireplace</span></label>
+          <label class="checkbox-item"><input type="checkbox" name="amenity" value="Hot Tub"><span class="checkbox-label">Hot Tub</span></label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="apply-filters-btn" style="margin-top:var(--space-4);">Apply Filters</button>
+    </aside>
+
+    <!-- RESULTS AREA -->
+    <main>
+      <!-- Search Bar + Controls -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-6);flex-wrap:wrap;">
+        <div id="results-count" style="font-size:0.9rem;color:var(--text-3);font-weight:500;"></div>
+        <div style="display:flex;align-items:center;gap:var(--space-3);">
+          <button class="btn btn-outline btn-sm" id="filter-toggle-btn" style="display:none;">⚙️ Filters</button>
+          <select class="form-control" id="sort-select" style="width:auto;font-size:0.875rem;">
+            <option value="createdAt">Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-listings stagger" id="results-grid"><!-- injected --></div>
+      <div class="pagination" id="pagination"></div>
+    </main>
+  </div>
+</div>
+
+<script type="module" src="../js/search.js"></script>
+</body>
+</html>
+
