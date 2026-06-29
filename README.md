@@ -1,6 +1,6 @@
-# Staybnb
+# Helastay 🇱🇰
 
-Staybnb is a full-stack property rental application developed with Java and Spring Boot. It provides a secure platform for users to browse listings, make bookings, leave reviews, and manage their profiles.
+Helastay is a full-stack property rental application developed with Java and Spring Boot. It provides a secure platform for users to browse listings, make bookings, leave reviews, and manage their profiles.
 
 ## Technologies Used
 
